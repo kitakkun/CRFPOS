@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.List
@@ -91,38 +92,38 @@ fun RecordListContent(
         ) {
             Text(
                 text = stringResource(id = R.string.date_time),
-                fontSize = 25.sp,
-                modifier = Modifier.width(350.dp)
+                fontSize = 20.sp,
+                modifier = Modifier.width(250.dp)
             )
 
             Text(
                 text = stringResource(id = R.string.total),
-                fontSize = 25.sp,
-                modifier = Modifier.width(200.dp)
+                fontSize = 20.sp,
+                modifier = Modifier.width(120.dp)
             )
 
             Text(
                 text = stringResource(id = R.string.goods_income),
-                fontSize = 25.sp,
-                modifier = Modifier.width(200.dp)
+                fontSize = 20.sp,
+                modifier = Modifier.width(120.dp)
             )
 
             Text(
                 text = stringResource(id = R.string.fare_income),
-                fontSize = 25.sp,
-                modifier = Modifier.width(200.dp)
+                fontSize = 20.sp,
+                modifier = Modifier.width(100.dp)
             )
 
             Text(
                 text = stringResource(id = R.string.adult),
-                fontSize = 25.sp,
-                modifier = Modifier.width(200.dp)
+                fontSize = 20.sp,
+                modifier = Modifier.width(50.dp)
             )
 
             Text(
                 text = stringResource(id = R.string.child),
-                fontSize = 25.sp,
-                modifier = Modifier.width(200.dp)
+                fontSize = 20.sp,
+                modifier = Modifier.width(50.dp)
             )
         }
 
@@ -158,40 +159,63 @@ private fun RecordListItem(
             ) {
                 Text(
                     text = convertUnixTimeToDateTime(record.time / 1000),
-                    fontSize = 25.sp,
-                    modifier = Modifier.width(350.dp)
+                    fontSize = 20.sp,
+                    modifier = Modifier.width(230.dp)
                 )
 
                 Text(
                     text = stringResource(id = R.string.yen, record.total),
-                    fontSize = 25.sp,
-                    modifier = Modifier.width(200.dp)
+                    fontSize = 20.sp,
+                    modifier = Modifier.width(100.dp)
                 )
 
                 Text(
                     text = stringResource(id = R.string.yen, record.goodsSales),
-                    fontSize = 25.sp,
-                    modifier = Modifier.width(200.dp)
+                    fontSize = 20.sp,
+                    modifier = Modifier.width(100.dp)
                 )
 
                 Text(
                     text = stringResource(id = R.string.yen, record.fareSales),
-                    fontSize = 25.sp,
-                    modifier = Modifier.width(200.dp)
+                    fontSize = 20.sp,
+                    modifier = Modifier.width(80.dp)
                 )
 
                 Text(
                     text = record.adult.toString(),
-                    fontSize = 25.sp,
-                    modifier = Modifier.width(200.dp)
+                    fontSize = 20.sp,
+                    modifier = Modifier.width(50.dp)
                 )
 
                 Text(
                     text = record.child.toString(),
-                    fontSize = 25.sp,
-                    modifier = Modifier.width(200.dp)
+                    fontSize = 20.sp,
+                    modifier = Modifier.width(50.dp)
                 )
 
+                LazyRow {
+                    record.goodsList?.let { it ->
+                        items(
+                            count = it.size,
+                            key = { index -> record.goodsList!![index].goods.id },
+                            itemContent = {
+                                Text(
+                                    text = record.goodsList!![it].goods.name,
+                                    fontSize = 15.sp,
+                                    modifier = Modifier.width(110.dp)
+                                )
+                                Text(
+                                    text = stringResource(
+                                        id = R.string.ko,
+                                        record.goodsList!![it].quantity
+                                    ),
+                                    fontSize = 15.sp,
+                                    modifier = Modifier.width(50.dp)
+                                )
+                            }
+                        )
+                    }
+                }
 
 
             }

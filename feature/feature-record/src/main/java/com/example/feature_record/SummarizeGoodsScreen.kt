@@ -53,7 +53,7 @@ private fun SummarizeGoodsScreen(
                     }
                 },
 
-            )
+                )
         },
     ) { paddingValues ->
         Column(
@@ -64,51 +64,10 @@ private fun SummarizeGoodsScreen(
             ) {
                 Text(
                     text = stringResource(id = R.string.date),
-                    fontSize = 25.sp,
-                    modifier = Modifier.width(250.dp)
+                    fontSize = 20.sp,
+                    modifier = Modifier.width(120.dp)
                 )
 
-                Text(
-                    text = stringResource(id = R.string.count),
-                    fontSize = 25.sp,
-                    modifier = Modifier.width(150.dp)
-                )
-
-                Text(
-                    text = stringResource(id = R.string.soukei),
-                    fontSize = 25.sp,
-                    modifier = Modifier.width(150.dp)
-                )
-
-                Text(
-                    text = stringResource(id = R.string.goods_income),
-                    fontSize = 25.sp,
-                    modifier = Modifier.width(150.dp)
-                )
-
-                Text(
-                    text = stringResource(id = R.string.fare_income),
-                    fontSize = 25.sp,
-                    modifier = Modifier.width(150.dp)
-                )
-
-                Text(
-                    text = stringResource(id = R.string.person),
-                    fontSize = 25.sp,
-                    modifier = Modifier.width(150.dp)
-                )
-
-                Text(
-                    text = stringResource(id = R.string.adult),
-                    fontSize = 25.sp,
-                    modifier = Modifier.width(150.dp)
-                )
-
-                Text(
-                    text = stringResource(id = R.string.child),
-                    fontSize = 25.sp,
-                    modifier = Modifier.width(150.dp)
-                )
             }
             LazyColumn {
                 items(
@@ -118,7 +77,7 @@ private fun SummarizeGoodsScreen(
                         SalesSummaryItem(
                             dailyGoodsSalesSummary = dailyGoodsSalesSummary[it],
 
-                        )
+                            )
                     }
                 )
             }
@@ -139,8 +98,8 @@ fun SalesSummaryItem(
             ) {
                 Text(
                     text = dailyGoodsSalesSummary.date,
-                    fontSize = 25.sp,
-                    modifier = Modifier.width(150.dp)
+                    fontSize = 20.sp,
+                    modifier = Modifier.width(120.dp)
                 )
 
                 LazyRow {
@@ -159,7 +118,7 @@ fun SalesSummaryItem(
 
         },
 
-    )
+        )
     HorizontalDivider()
 }
 
@@ -169,13 +128,13 @@ fun SalesSummaryGoodsItem(
 ) {
     ListItem(
         headlineContent = {
-            Column (
+            Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     text = goodsSales.goodsName,
                     fontSize = 10.sp,
-                    modifier = Modifier.width(50.dp)
+                    modifier = Modifier.width(55.dp)
                 )
 
                 Text(
