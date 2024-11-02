@@ -17,6 +17,8 @@ import com.example.feature_record.EditRecordScreen
 import com.example.feature_record.EditRecordViewModel
 import com.example.feature_record.RecordScreen
 import com.example.feature_record.RecordViewModel
+import com.example.feature_record.SummarizeGoodsScreen
+import com.example.feature_record.SummarizeGoodsViewModel
 import com.example.feature_record.SummarizeRecordScreen
 import com.example.feature_record.SummarizeRecordViewModel
 import com.example.feature_sales.SalesScreen
@@ -86,6 +88,19 @@ fun MainApp() {
         composable("/record/summary") {
             val viewModel: SummarizeRecordViewModel = hiltViewModel()
             SummarizeRecordScreen(
+                back = {
+                    navController.popBackStack()
+                },
+                viewModel = viewModel,
+                toSummarizeGoods = {
+                    navController.navigate("/record/summary/goods")
+                }
+            )
+        }
+
+        composable("/record/summary/goods") {
+            val viewModel: SummarizeGoodsViewModel = hiltViewModel()
+            SummarizeGoodsScreen(
                 back = {
                     navController.popBackStack()
                 },

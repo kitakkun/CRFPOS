@@ -17,4 +17,5 @@
     <string name="person">乗車人員</string>
     <string name="count">件数</string>
     <string name="ken">%s件</string>
+    <string name="diary_goods_summary">日別商品集計</string>
 </resources>

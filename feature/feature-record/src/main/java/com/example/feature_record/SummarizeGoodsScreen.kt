@@ -1,15 +1,14 @@
 package com.example.feature_record
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -21,54 +20,40 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.database.dao.RecordDao
 
 @Composable
-fun SummarizeRecordScreen(
+fun SummarizeGoodsScreen(
     back: () -> Unit,
-    viewModel: SummarizeRecordViewModel,
-    toSummarizeGoods: () -> Unit,
+    viewModel: SummarizeGoodsViewModel,
 ) {
-    val items = viewModel.items.collectAsState(initial = emptyList())
-    val context = LocalContext.current
-    SummarizeRecordScreen(
+    val items = viewModel.dailyGoodsSalesSummary.collectAsState(initial = emptyList())
+    SummarizeGoodsScreen(
         back = back,
-        recordDateList = items.value,
-        toExportCSV = { date ->
-            viewModel.exportRecordToCSV(date = date, context = context)
-        },
-        toSummarizeGoods = toSummarizeGoods,
+        dailyGoodsSalesSummary = items.value,
     )
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SummarizeRecordScreen(
+private fun SummarizeGoodsScreen(
     back: () -> Unit,
-    recordDateList: List<RecordDao.Summary>,
-    toExportCSV: (String) -> Unit,
-    toSummarizeGoods: () -> Unit,
+    dailyGoodsSalesSummary: List<SummarizeGoodsViewModel.DailyGoodsSalesSummary>,
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.diary_summary)) },
+                title = { Text(stringResource(R.string.diary_goods_summary)) },
                 navigationIcon = {
                     IconButton(onClick = back) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
-                actions = {
-                    IconButton(onClick = toSummarizeGoods) {
-                        Icon(Icons.Default.ShoppingCart, contentDescription = "SUMMARIZE GOODS")
-                    }
-                }
 
-                )
+            )
         },
     ) { paddingValues ->
         Column(
@@ -127,14 +112,11 @@ private fun SummarizeRecordScreen(
             }
             LazyColumn {
                 items(
-                    count = recordDateList.size,
-                    key = { index -> recordDateList[index].date },
+                    count = dailyGoodsSalesSummary.size,
+                    key = { index -> dailyGoodsSalesSummary[index].date },
                     itemContent = {
-                        SummaryRecordItem(
-                            recordSummary = recordDateList[it],
-                            onClick = {
-                                toExportCSV(recordDateList[it].date)
-                            }
+                        SalesSummaryItem(
+                            dailyGoodsSalesSummary = dailyGoodsSalesSummary[it],
 
                         )
                     }
@@ -147,9 +129,8 @@ private fun SummarizeRecordScreen(
 }
 
 @Composable
-fun SummaryRecordItem(
-    recordSummary: RecordDao.Summary,
-    onClick: () -> Unit,
+fun SalesSummaryItem(
+    dailyGoodsSalesSummary: SummarizeGoodsViewModel.DailyGoodsSalesSummary,
 ) {
     ListItem(
         headlineContent = {
@@ -157,62 +138,52 @@ fun SummaryRecordItem(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = recordSummary.date,
-                    fontSize = 25.sp,
-                    modifier = Modifier.width(250.dp)
-                )
-
-                Text(
-                    text = stringResource(id = R.string.ken, recordSummary.numOfSales.toString()),
+                    text = dailyGoodsSalesSummary.date,
                     fontSize = 25.sp,
                     modifier = Modifier.width(150.dp)
                 )
 
+                LazyRow {
+                    items(
+                        count = dailyGoodsSalesSummary.salesSummary.size,
+                        key = { index -> dailyGoodsSalesSummary.salesSummary[index].goodsId },
+                        itemContent = {
+                            SalesSummaryGoodsItem(
+                                goodsSales = dailyGoodsSalesSummary.salesSummary[it],
 
-                Text(
-                    text = stringResource(id = R.string.yen, recordSummary.totalSum.toString()),
-                    fontSize = 25.sp,
-                    modifier = Modifier.width(150.dp)
-                )
-
-                Text(
-                    text = stringResource(id = R.string.yen, recordSummary.goodsSalesSum.toString()),
-                    fontSize = 25.sp,
-                    modifier = Modifier.width(150.dp)
-                )
-
-                Text(
-                    text = stringResource(id = R.string.yen, recordSummary.fareSalesSum.toString()),
-                    fontSize = 25.sp,
-                    modifier = Modifier.width(150.dp)
-                )
-
-                Text(
-                    text = recordSummary.numOfPerson.toString(),
-                    fontSize = 25.sp,
-                    modifier = Modifier.width(150.dp)
-                )
-
-                Text(
-                    text = recordSummary.adultSum.toString(),
-                    fontSize = 25.sp,
-                    modifier = Modifier.width(150.dp)
-                )
-
-                Text(
-                    text = recordSummary.childSum.toString(),
-                    fontSize = 25.sp,
-                    modifier = Modifier.width(150.dp)
-                )
-
-
-
+                                )
+                        }
+                    )
+                }
             }
+
         },
 
-        modifier = Modifier.clickable {
-            onClick()
-        }
     )
     HorizontalDivider()
+}
+
+@Composable
+fun SalesSummaryGoodsItem(
+    goodsSales: SummarizeGoodsViewModel.GoodsSalesSummary,
+) {
+    ListItem(
+        headlineContent = {
+            Column (
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = goodsSales.goodsName,
+                    fontSize = 10.sp,
+                    modifier = Modifier.width(50.dp)
+                )
+
+                Text(
+                    text = goodsSales.totalQuantity.toString(),
+                    fontSize = 15.sp,
+                    modifier = Modifier.width(20.dp)
+                )
+            }
+        },
+    )
 }
