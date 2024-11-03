@@ -32,24 +32,38 @@ fun MainApp() {
         composable("/") {
             MainScreen(
                 toSalesScreen = {
-                    navController.navigate("/sales")
+                    navController.navigate("/sales/normal")
                 },
                 toRecordScreen = {
                     navController.navigate("/record")
                 },
                 toGoodsScreen = {
                     navController.navigate("/goods")
+                },
+                toGoodsSalesScreen = {
+                    navController.navigate("/sales/goods")
                 }
             )
         }
 
-        composable("/sales") {
+        composable("/sales/normal") {
             val viewModel: SalesViewModel = hiltViewModel()
             SalesScreen(
                 viewModel = viewModel,
                 back = {
                     navController.popBackStack()
                 }
+            )
+        }
+
+        composable("/sales/goods") {
+            val viewModel: SalesViewModel = hiltViewModel()
+            SalesScreen(
+                viewModel = viewModel,
+                back = {
+                    navController.popBackStack()
+                },
+                isGoodsOnly = true
             )
         }
 

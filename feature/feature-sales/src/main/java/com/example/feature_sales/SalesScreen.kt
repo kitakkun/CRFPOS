@@ -71,6 +71,7 @@ private const val MAX_TICKET_DIGITS = 4
 fun SalesScreen(
     viewModel: SalesViewModel,
     back: () -> Unit,
+    isGoodsOnly: Boolean = false
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val salesScreenState by viewModel.salesScreenState.collectAsState()
@@ -108,7 +109,8 @@ fun SalesScreen(
         onClickAdjust = {
             viewModel.saveRecord()
             viewModel.reset()
-        }
+        },
+        isGoodsOnly = isGoodsOnly
     )
 
 }
@@ -128,7 +130,8 @@ private fun SalesScreen(
     salesScreenState: SalesScreenState,
     goodsList: List<Goods>,
     onClickGoodsFromList: (Goods) -> Unit,
-    onClickAdjust: () -> Unit
+    onClickAdjust: () -> Unit,
+    isGoodsOnly: Boolean
 ) {
 
     var adultManualCountText by rememberSaveable { mutableStateOf("") }
@@ -186,7 +189,8 @@ private fun SalesScreen(
             onClickPlusForSelectedGoods = { onClickPlusForSelectedGoods(it) },
             onClickDeleteForSelectedGoods = { onClickDeleteForSelectedGoods(it) },
             onClickGoodsFromList = { onClickGoodsFromList(it) },
-            onClickAdjust = { onClickAdjust() }
+            onClickAdjust = { onClickAdjust() },
+            isGoodsOnly = isGoodsOnly
         )
     }
 
@@ -236,6 +240,8 @@ private fun SalesScreenContent(
     goodsList: List<Goods>,
     onClickGoodsFromList: (Goods) -> Unit,
     onClickAdjust: () -> Unit,
+
+    isGoodsOnly: Boolean
 ) {
     Row(
         modifier = modifier
@@ -273,40 +279,43 @@ private fun SalesScreenContent(
                 onClickAdjust = onClickAdjust,
             )
 
-            ShowSelectPersonCount(
-                adultCount = adultCount,
-                childCount = childCount,
-                onChangeAdultCount = {
-                    onChangeAdultCount(it)
-                },
+            if (!isGoodsOnly) {
+                ShowSelectPersonCount(
+                    adultCount = adultCount,
+                    childCount = childCount,
+                    onChangeAdultCount = {
+                        onChangeAdultCount(it)
+                    },
 
-                adultManualCountText = adultManualCountText,
-                onChangeAdultManualCountText = {
-                    onChangeAdultManualCountText(it)
-                },
-                onClickApplyAdultManualCountText =
-                {
-                    if (adultManualCountText.toIntOrNull() != null) {
-                        onChangeAdultCount(adultManualCountText.toIntOrNull()!!)
-                    } else {
-                        onChangeAdultManualCountText("")
-                    }
-                },
-                onChangeChildCount = {
-                    onChangeChildCount(it)
-                },
-                childManualCountText = childManualCountText,
-                onChangeChildManualCountText = {
-                    onChangeChildManualCountText(it)
-                },
-                onClickApplyChildManualCountText = {
-                    if (childManualCountText.toIntOrNull() != null) {
-                        onChangeChildCount(childManualCountText.toIntOrNull()!!)
-                    } else {
-                        onChangeChildManualCountText("")
-                    }
-                },
-            )
+                    adultManualCountText = adultManualCountText,
+                    onChangeAdultManualCountText = {
+                        onChangeAdultManualCountText(it)
+                    },
+                    onClickApplyAdultManualCountText =
+                    {
+                        if (adultManualCountText.toIntOrNull() != null) {
+                            onChangeAdultCount(adultManualCountText.toIntOrNull()!!)
+                        } else {
+                            onChangeAdultManualCountText("")
+                        }
+                    },
+                    onChangeChildCount = {
+                        onChangeChildCount(it)
+                    },
+                    childManualCountText = childManualCountText,
+                    onChangeChildManualCountText = {
+                        onChangeChildManualCountText(it)
+                    },
+                    onClickApplyChildManualCountText = {
+                        if (childManualCountText.toIntOrNull() != null) {
+                            onChangeChildCount(childManualCountText.toIntOrNull()!!)
+                        } else {
+                            onChangeChildManualCountText("")
+                        }
+                    },
+                )
+            }
+
 
             ShowGoodsList(
                 goodsList = goodsList,
@@ -1116,7 +1125,8 @@ private fun SalesScreenPreview() {
                 onClickPlusForSelectedGoods = {},
                 onClickDeleteForSelectedGoods = {},
                 onClickGoodsFromList = {},
-                onClickAdjust = {}
+                onClickAdjust = {},
+                isGoodsOnly = false
             )
 
         }

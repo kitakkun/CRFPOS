@@ -3,4 +3,5 @@
     <string name="sales">販売</string>
     <string name="records_manage">売上管理</string>
     <string name="goods_manage">商品管理</string>
+    <string name="sales_goods_only">（物販のみ）</string>
 </resources>

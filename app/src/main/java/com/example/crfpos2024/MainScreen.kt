@@ -6,8 +6,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -31,44 +34,71 @@ fun MainScreen(
     toSalesScreen: () -> Unit,
     toRecordScreen: () -> Unit,
     toGoodsScreen: () -> Unit,
+    toGoodsSalesScreen: () -> Unit,
 ) {
-    Column(
+    Row(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .background(MaterialTheme.colorScheme.background)
-            .padding(start = 20.dp, end = 20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+            .padding(vertical = 16.dp, horizontal = 32.dp),
+
+        horizontalArrangement = Arrangement.spacedBy(32.dp),
     ) {
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .width(585.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
 
-        CustomButton(
-            text = stringResource(R.string.sales),
-            textColor = Color.Black,
-            backgroundColor = Color.LightGray,
-            onClick = toSalesScreen,
-            modifier = Modifier.padding(bottom = 15.dp)
-        )
+            CustomButton(
+                text = stringResource(R.string.sales),
+                textColor = Color.Black,
+                backgroundColor = Color.LightGray,
+                onClick = toSalesScreen,
+                modifier = Modifier.padding(bottom = 15.dp)
+            )
 
-        Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(15.dp))
 
-        CustomButton(
-            text = stringResource(R.string.records_manage),
-            textColor = Color.Black,
-            backgroundColor = Color.LightGray,
-            onClick = toRecordScreen,
-            modifier = Modifier.padding(bottom = 15.dp)
-        )
+            CustomButton2Line(
+                text1 = stringResource(R.string.sales),
+                text2 = stringResource(R.string.sales_goods_only),
+                textColor = Color.Black,
+                backgroundColor = Color.LightGray,
+                onClick = toGoodsSalesScreen,
+                modifier = Modifier.padding(bottom = 15.dp)
+            )
+        }
 
-        Spacer(modifier = Modifier.height(15.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(start = 20.dp, end = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
 
-        CustomButton(
-            text = stringResource(R.string.goods_manage),
-            textColor = Color.Black,
-            backgroundColor = Color.LightGray,
-            onClick = toGoodsScreen,
-            modifier = Modifier.padding(bottom = 15.dp)
-        )
+            CustomButton(
+                text = stringResource(R.string.records_manage),
+                textColor = Color.Black,
+                backgroundColor = Color.LightGray,
+                onClick = toRecordScreen,
+                modifier = Modifier.padding(bottom = 15.dp)
+            )
 
+            Spacer(modifier = Modifier.height(15.dp))
+
+            CustomButton(
+                text = stringResource(R.string.goods_manage),
+                textColor = Color.Black,
+                backgroundColor = Color.LightGray,
+                onClick = toGoodsScreen,
+                modifier = Modifier.padding(bottom = 15.dp)
+            )
+        }
     }
 
 }
@@ -103,6 +133,51 @@ private fun CustomButton(
             color = textColor,
             fontSize = 50.sp
         )
+    }
+}
+
+@Composable
+private fun CustomButton2Line(
+    text1: String,
+    text2: String,
+    textColor: Color,
+    backgroundColor: Color,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .width(350.dp)
+            .height(180.dp)
+            .padding(1.dp)
+            .background(backgroundColor)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center,
+    ) {
+        CustomBorder(
+            4.dp,
+            Color.Black,
+            Color.Black,
+            Color.Black,
+            Color.Black
+        )
+        Column (
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = text1,
+                style = MaterialTheme.typography.titleLarge,
+                color = textColor,
+                fontSize = 50.sp
+            )
+            Text(
+                text = text2,
+                style = MaterialTheme.typography.titleLarge,
+                color = textColor,
+                fontSize = 50.sp
+            )
+        }
     }
 }
 
@@ -155,6 +230,7 @@ private fun Preview() {
             toSalesScreen = {},
             toRecordScreen = {},
             toGoodsScreen = {},
+            toGoodsSalesScreen = {}
         )
     }
 
