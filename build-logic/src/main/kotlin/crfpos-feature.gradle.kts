@@ -9,7 +9,7 @@ plugins {
 }
 
 kotlin {
-    jvmToolchain(8)
+    jvmToolchain(17)
 }
 
 configure<BaseExtension> {
@@ -51,7 +51,7 @@ dependencies {
     implementation(libs.findLibrary("androidx-material-icons-core").get())
 
     implementation(libs.findLibrary("hilt-android").get())
-    
+
     ksp(libs.findLibrary("hilt-compiler").get())
     ksp(libs.findLibrary("hilt-android-compiler").get())
 
