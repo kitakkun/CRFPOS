@@ -19,7 +19,7 @@ hilt-compiler = "2.49"
 room = "2.6.1"
 ksp = "2.0.20-1.0.24"
 
-compileSdk = "34"
+compileSdk = "36"
 minSdk = "26"
 targetSdk = "34"
 
