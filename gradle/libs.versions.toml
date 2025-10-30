@@ -71,6 +71,7 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "dagger.hilt.android.plugin", version.ref = "hilt-android" }
+room = { id = "androidx.room", version.ref = "room" }
 
 [bundles]
 gradlePlugins = [
