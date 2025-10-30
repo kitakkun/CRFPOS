@@ -23,7 +23,6 @@ compileSdk = "36"
 minSdk = "26"
 targetSdk = "34"
 
-jetbrainsKotlinJvm = "2.2.21"
 gson = "2.13.2"
 
 [libraries]
@@ -72,7 +71,6 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "dagger.hilt.android.plugin", version.ref = "hilt-android" }
-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
 [bundles]
 gradlePlugins = [
