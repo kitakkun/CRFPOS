@@ -1,7 +1,7 @@
 package com.example.crfpos2024
 
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -83,7 +83,8 @@ fun MainApp() {
             )
         }
 
-        composable("/record/{recordId}",
+        composable(
+            "/record/{recordId}",
             arguments = listOf(
                 navArgument("recordId") {
                     type = NavType.LongType
@@ -148,7 +149,8 @@ fun MainApp() {
             )
         }
 
-        composable("/goods/{goodsId}",
+        composable(
+            "/goods/{goodsId}",
             arguments = listOf(
                 navArgument("goodsId") {
                     type = NavType.LongType
