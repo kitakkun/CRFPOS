@@ -1,4 +1,4 @@
-package com.example.crfpos2024.ui.theme
+package com.example.crfpos2025.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

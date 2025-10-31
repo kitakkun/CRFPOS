@@ -1,4 +1,4 @@
-package com.example.crfpos2024
+package com.example.crfpos2025
 
 import android.content.Context
 import androidx.room.Room

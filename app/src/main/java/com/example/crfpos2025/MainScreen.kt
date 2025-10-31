@@ -1,4 +1,4 @@
-package com.example.crfpos2024
+package com.example.crfpos2025
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -27,7 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.crfpos2024.ui.theme.CRFPOS2024Theme
+import com.example.crfpos2025.ui.theme.CRFPOS2024Theme
 
 @Composable
 fun MainScreen(

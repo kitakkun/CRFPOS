@@ -24,7 +24,7 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
-rootProject.name = "CRFPOS2024"
+rootProject.name = "CRFPOS2025"
 include(":app")
 
 include(":feature:feature-goods")
