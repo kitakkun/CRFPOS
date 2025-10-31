@@ -1,0 +1,94 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "911d6bfddcfcfe798df02254232070bc",
+    "entities": [
+      {
+        "tableName": "goods",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `price` INTEGER NOT NULL, `purchases` INTEGER NOT NULL, `remain` INTEGER NOT NULL, `isAvailable` INTEGER NOT NULL, `displayOrder` INTEGER NOT NULL, `isPartOfSet` INTEGER NOT NULL, `setId` INTEGER, `setPrice` INTEGER, `setRequiredQuantity` INTEGER, `isBulkOnly` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "price",
+            "columnName": "price",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "purchases",
+            "columnName": "purchases",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "remain",
+            "columnName": "remain",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isAvailable",
+            "columnName": "isAvailable",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "displayOrder",
+            "columnName": "displayOrder",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isPartOfSet",
+            "columnName": "isPartOfSet",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "setId",
+            "columnName": "setId",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "setPrice",
+            "columnName": "setPrice",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "setRequiredQuantity",
+            "columnName": "setRequiredQuantity",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "isBulkOnly",
+            "columnName": "isBulkOnly",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '911d6bfddcfcfe798df02254232070bc')"
+    ]
+  }
+}

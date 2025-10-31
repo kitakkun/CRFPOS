@@ -1,9 +1,13 @@
 plugins {
-    id("java-library")
-    alias(libs.plugins.jetbrains.kotlin.jvm)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+android {
+    compileSdk = libs.versions.compileSdk.get().toInt()
+    namespace = "com.example.core_model"
+}
+
+kotlin {
+    jvmToolchain(17)
 }
