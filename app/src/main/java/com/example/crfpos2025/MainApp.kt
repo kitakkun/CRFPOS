@@ -65,9 +65,6 @@ fun MainApp() {
         composable("/record") {
             RecordScreenRoot(
                 viewModel = hiltViewModel(),
-                recordViewModel = hiltViewModel(),
-                summarizeGoodsViewModel = hiltViewModel(),
-                summarizeRecordViewModel = hiltViewModel(),
                 onClickBack = navController::popBackStack,
                 onClickRecordItem = { navController.navigate("/record/${it}") },
             )

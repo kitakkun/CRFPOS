@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SummarizeGoodsScreen(
-    dailyGoodsSalesSummary: List<SummarizeGoodsViewModel.DailyGoodsSalesSummary>,
+    dailyGoodsSalesSummary: List<DailyGoodsSalesSummary>,
 ) {
     Column {
         Row(
@@ -48,7 +48,7 @@ fun SummarizeGoodsScreen(
 
 @Composable
 fun SalesSummaryItem(
-    dailyGoodsSalesSummary: SummarizeGoodsViewModel.DailyGoodsSalesSummary,
+    dailyGoodsSalesSummary: DailyGoodsSalesSummary,
 ) {
     ListItem(
         headlineContent = {
@@ -83,7 +83,7 @@ fun SalesSummaryItem(
 
 @Composable
 fun SalesSummaryGoodsItem(
-    goodsSales: SummarizeGoodsViewModel.GoodsSalesSummary,
+    goodsSales: GoodsSalesSummary,
 ) {
     ListItem(
         headlineContent = {

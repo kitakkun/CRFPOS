@@ -22,9 +22,6 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun RecordScreenRoot(
     viewModel: RecordScreenRootViewModel,
-    recordViewModel: RecordViewModel,
-    summarizeGoodsViewModel: SummarizeGoodsViewModel,
-    summarizeRecordViewModel: SummarizeRecordViewModel,
     onClickBack: () -> Unit,
     onClickRecordItem: (recordId: Long) -> Unit,
 ) {
@@ -53,19 +50,17 @@ fun RecordScreenRoot(
             )
             when (viewModel.displayMode) {
                 RecordScreenDisplayMode.PerRecord -> RecordScreen(
-                    recordList = recordViewModel.items.collectAsState(emptyList()).value,
+                    recordList = viewModel.rawRecords.collectAsState(emptyList()).value,
                     onClickItem = { onClickRecordItem(it.id) },
                 )
 
                 RecordScreenDisplayMode.PerDate -> SummarizeRecordScreen(
-                    recordDateList = summarizeRecordViewModel.items.collectAsState(emptyList()).value,
-                    onClickItem = {
-                        summarizeRecordViewModel.exportRecordToCSV(it.date, context)
-                    }
+                    recordDateList = viewModel.dateList.collectAsState(emptyList()).value,
+                    onClickItem = { viewModel.exportRecordToCSV(it.date, context) },
                 )
 
                 RecordScreenDisplayMode.PerDateGoods -> SummarizeGoodsScreen(
-                    dailyGoodsSalesSummary = summarizeGoodsViewModel.dailyGoodsSalesSummary.collectAsState(
+                    dailyGoodsSalesSummary = viewModel.dailyGoodsSalesSummary.collectAsState(
                         emptyList()
                     ).value
                 )
