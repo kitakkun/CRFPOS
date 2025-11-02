@@ -86,7 +86,7 @@ fun RawRecordScreenView(
 
 @Composable
 private fun RecordListItem(
-    record: com.example.model.Record,
+    record: Record,
     onClick: () -> Unit,
 ) {
     ListItem(
