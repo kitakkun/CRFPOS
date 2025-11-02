@@ -2,6 +2,8 @@ package com.example.feature_record
 
 import androidx.lifecycle.ViewModel
 import com.example.data.repository.RecordRepository
+import com.example.model.CartItem
+import com.example.model.Goods
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -9,6 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
+import kotlin.collections.map
 
 @HiltViewModel
 class SummarizeGoodsViewModel @Inject constructor(
@@ -30,37 +33,27 @@ class SummarizeGoodsViewModel @Inject constructor(
     )
 
     private fun getDailySalesSummary(): Flow<List<DailyGoodsSalesSummary>> {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
         return recordList.map { records ->
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val dailySummaryMap = mutableMapOf<String, MutableMap<Long, GoodsSalesSummary>>()
-
-            records.forEach { record ->
-                // 日付を文字列として取得（例: "2024-10-30"）
+            records.groupBy { record ->
                 val dateKey = dateFormat.format(Date(record.time))
+                dateKey
+            }.map { (dateKey, recordsForDate) ->
+                val allCartItemsForDate: List<CartItem> =
+                    recordsForDate.flatMap { it.goodsList.orEmpty() }
+                val goodsCartItemsMap: Map<Goods, List<CartItem>> =
+                    allCartItemsForDate.groupBy { it.goods }
 
-                // 日付ごとの集計を格納するマップを取得
-                val summaryMap = dailySummaryMap.getOrPut(dateKey) { mutableMapOf() }
-
-                record.goodsList?.forEach { cartItem ->
-                    val goods = cartItem.goods
-                    val quantity = cartItem.quantity
-
-                    // 商品ごとの集計を更新
-                    val summary = summaryMap.getOrPut(goods.id) {
+                DailyGoodsSalesSummary(
+                    date = dateKey,
+                    salesSummary = goodsCartItemsMap.map { (goods, cartItems) ->
                         GoodsSalesSummary(
+                            totalQuantity = cartItems.sumOf { it.quantity },
                             goodsId = goods.id,
-                            goodsName = goods.name
+                            goodsName = goods.name,
                         )
                     }
-                    summary.totalQuantity += quantity
-                }
-            }
-
-            // マップからリストに変換し、商品ID順に並び替え
-            dailySummaryMap.map { (date, salesMap) ->
-                DailyGoodsSalesSummary(
-                    date = date,
-                    salesSummary = salesMap.values.sortedBy { it.goodsId }  // 商品ID順にソート
                 )
             }
         }
