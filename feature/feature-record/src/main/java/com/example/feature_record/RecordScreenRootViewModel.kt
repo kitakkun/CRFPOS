@@ -1,6 +1,8 @@
 package com.example.feature_record
 
-import android.content.Context
+import android.content.ContentResolver
+import android.net.Uri
+import android.provider.DocumentsContract
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -11,6 +13,8 @@ import com.example.model.CartItem
 import com.example.model.Goods
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -21,6 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RecordScreenRootViewModel @Inject constructor(
     private val repository: RecordRepository,
+    private val recordsCSVStringGenerator: RecordsCSVStringGenerator,
 ) : ViewModel() {
     val rawRecords = repository.getAll()
 
@@ -53,18 +58,46 @@ class RecordScreenRootViewModel @Inject constructor(
 
     var displayMode: RecordScreenDisplayMode by mutableStateOf(RecordScreenDisplayMode.PerRecord)
 
+    private val mutableExportToCsvSucceededFlow: MutableSharedFlow<Unit> = MutableSharedFlow()
+    val exportToCsvSucceededFlow: SharedFlow<Unit> = mutableExportToCsvSucceededFlow
+
+    private val mutableExportToCsvFailedFlow: MutableSharedFlow<String> = MutableSharedFlow()
+    val exportToCsvFailedFlow: SharedFlow<String> = mutableExportToCsvFailedFlow
+
     fun updateDisplayMode(mode: RecordScreenDisplayMode) {
         displayMode = mode
     }
 
-    fun exportRecordToCSV(date: String, context: Context?) {
+    fun exportRecordToCSV(
+        date: String,
+        outputTargetDirUri: Uri,
+        contentResolver: ContentResolver,
+    ) {
         viewModelScope.launch {
             try {
                 val recordList = repository.getDiaryData(date)
-                val exporter = Exporter()
-                exporter.writeRecordsToCSV(recordList, date, context)
+                val parentDocumentUri = DocumentsContract.buildDocumentUriUsingTree(
+                    outputTargetDirUri,
+                    DocumentsContract.getTreeDocumentId(outputTargetDirUri)
+                )
+
+                val document = DocumentsContract.createDocument(
+                    contentResolver,
+                    parentDocumentUri,
+                    "text/csv",
+                    "$date.csv"
+                ) ?: return@launch
+
+                val outputTextContent = recordsCSVStringGenerator.generateFromRecords(recordList)
+
+                contentResolver.openOutputStream(document)?.use { output ->
+                    output.write(outputTextContent.toByteArray())
+                }
+
+                mutableExportToCsvSucceededFlow.emit(Unit)
             } catch (e: Exception) {
                 e.printStackTrace()
+                mutableExportToCsvFailedFlow.emit("エクスポートに失敗しました: ${e.message}")
             }
         }
     }
