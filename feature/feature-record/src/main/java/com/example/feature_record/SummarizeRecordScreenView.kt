@@ -1,10 +1,12 @@
 package com.example.feature_record
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ListItem
@@ -21,7 +23,9 @@ import com.example.database.dao.RecordDao
 fun SummarizeRecordScreenView(
     recordDateList: List<RecordDao.Summary>,
 ) {
-    Column {
+    Column(
+        modifier = Modifier.horizontalScroll(rememberScrollState())
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
