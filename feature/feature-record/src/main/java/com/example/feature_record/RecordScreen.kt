@@ -11,7 +11,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -23,18 +22,6 @@ import java.util.Locale
 
 @Composable
 fun RecordScreen(
-    viewModel: RecordViewModel,
-    onClickItem: (Record) -> Unit,
-) {
-    val items = viewModel.items.collectAsState(initial = emptyList())
-    RecordListContent(
-        recordList = items.value,
-        onClickItem = onClickItem,
-    )
-}
-
-@Composable
-fun RecordListContent(
     modifier: Modifier = Modifier,
     recordList: List<Record>,
     onClickItem: (Record) -> Unit,
