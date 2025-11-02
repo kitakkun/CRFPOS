@@ -69,29 +69,32 @@ class RecordScreenViewModel @Inject constructor(
     }
 
     fun exportRecordToCSV(
-        date: String,
+        exportTargetDates: Set<String>,
         outputTargetDirUri: Uri,
         contentResolver: ContentResolver,
     ) {
         viewModelScope.launch {
             try {
-                val recordList = repository.getDiaryData(date)
-                val parentDocumentUri = DocumentsContract.buildDocumentUriUsingTree(
-                    outputTargetDirUri,
-                    DocumentsContract.getTreeDocumentId(outputTargetDirUri)
-                )
+                exportTargetDates.forEach { exportTargetDate ->
+                    val recordList = repository.getDiaryData(exportTargetDate)
+                    val parentDocumentUri = DocumentsContract.buildDocumentUriUsingTree(
+                        outputTargetDirUri,
+                        DocumentsContract.getTreeDocumentId(outputTargetDirUri)
+                    )
 
-                val document = DocumentsContract.createDocument(
-                    contentResolver,
-                    parentDocumentUri,
-                    "text/csv",
-                    "$date.csv"
-                ) ?: return@launch
+                    val document = DocumentsContract.createDocument(
+                        contentResolver,
+                        parentDocumentUri,
+                        "text/csv",
+                        "$exportTargetDate.csv"
+                    ) ?: return@launch
 
-                val outputTextContent = recordsCSVStringGenerator.generateFromRecords(recordList)
+                    val outputTextContent =
+                        recordsCSVStringGenerator.generateFromRecords(recordList)
 
-                contentResolver.openOutputStream(document)?.use { output ->
-                    output.write(outputTextContent.toByteArray())
+                    contentResolver.openOutputStream(document)?.use { output ->
+                        output.write(outputTextContent.toByteArray())
+                    }
                 }
 
                 mutableExportToCsvSucceededFlow.emit(Unit)

@@ -1,6 +1,5 @@
 package com.example.feature_record
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,7 +20,6 @@ import com.example.database.dao.RecordDao
 @Composable
 fun SummarizeRecordScreenView(
     recordDateList: List<RecordDao.Summary>,
-    onClickItem: (RecordDao.Summary) -> Unit,
 ) {
     Column {
         Row(
@@ -82,7 +80,6 @@ fun SummarizeRecordScreenView(
                 itemContent = {
                     SummaryRecordItem(
                         recordSummary = recordDateList[it],
-                        onClick = { onClickItem(recordDateList[it]) },
                     )
                 }
             )
@@ -93,7 +90,6 @@ fun SummarizeRecordScreenView(
 @Composable
 fun SummaryRecordItem(
     recordSummary: RecordDao.Summary,
-    onClick: () -> Unit,
 ) {
     ListItem(
         headlineContent = {
@@ -151,14 +147,8 @@ fun SummaryRecordItem(
                     fontSize = 25.sp,
                     modifier = Modifier.width(150.dp)
                 )
-
-
             }
         },
-
-        modifier = Modifier.clickable {
-            onClick()
-        }
     )
     HorizontalDivider()
 }

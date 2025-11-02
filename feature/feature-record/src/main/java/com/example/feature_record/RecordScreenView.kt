@@ -12,6 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,9 +30,9 @@ fun RecordScreenView(
     dailyGoodsSalesSummary: List<DailyGoodsSalesSummary>,
     snackbarHostState: SnackbarHostState,
     onClickBack: () -> Unit,
+    onClickExportCSV: () -> Unit,
     onSelectDisplayMode: (RecordScreenDisplayMode) -> Unit,
     onClickRecordItem: (Record) -> Unit,
-    onClickSummarizedRecordItem: (RecordDao.Summary) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -40,6 +41,13 @@ fun RecordScreenView(
                 navigationIcon = {
                     IconButton(onClick = onClickBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
+                    }
+                },
+                actions = {
+                    TextButton(
+                        onClick = onClickExportCSV,
+                    ) {
+                        Text("Export CSV")
                     }
                 }
             )
@@ -65,7 +73,6 @@ fun RecordScreenView(
 
                 RecordScreenDisplayMode.PerDate -> SummarizeRecordScreenView(
                     recordDateList = recordDateList,
-                    onClickItem = onClickSummarizedRecordItem,
                 )
 
                 RecordScreenDisplayMode.PerDateGoods -> SummarizeGoodsScreenView(

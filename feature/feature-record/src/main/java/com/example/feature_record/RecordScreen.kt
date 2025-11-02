@@ -1,5 +1,6 @@
 package com.example.feature_record
 
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -9,8 +10,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateSet
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.net.toUri
 import kotlinx.coroutines.launch
@@ -22,9 +25,12 @@ fun RecordScreen(
     onClickBack: () -> Unit,
     onClickRecordItem: (recordId: Long) -> Unit,
 ) {
+    val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
-    val contentResolver = LocalContext.current.contentResolver
-    var pendingSaveTargetDate: String? by remember { mutableStateOf(null) }
+    val pendingSaveTargetDates: SnapshotStateSet<String> = remember { mutableStateSetOf() }
+
+    val dateList by viewModel.dateList.collectAsState(emptyList())
+    var showExportTargetDateSelectionDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         launch {
@@ -44,27 +50,41 @@ fun RecordScreen(
         rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
             if (uri == null) return@rememberLauncherForActivityResult
             viewModel.exportRecordToCSV(
-                date = pendingSaveTargetDate ?: return@rememberLauncherForActivityResult,
+                exportTargetDates = pendingSaveTargetDates,
                 outputTargetDirUri = uri,
-                contentResolver = contentResolver,
+                contentResolver = context.contentResolver,
             )
-            pendingSaveTargetDate = null
+            showExportTargetDateSelectionDialog = false
         }
+
+    if (showExportTargetDateSelectionDialog) {
+        CSVExportDateSelectionDialog(
+            exportableDates = dateList.map { it.date },
+            onDismissRequest = { showExportTargetDateSelectionDialog = false },
+            onClickCancel = { showExportTargetDateSelectionDialog = false },
+            onClickExport = { selectedDates ->
+                pendingSaveTargetDates.addAll(selectedDates)
+                val documentDirUri =
+                    "content://com.android.externalstorage.documents/document/primary:Documents".toUri()
+                fileSavingTargetDirectoryPickerLauncher.launch(documentDirUri)
+                Toast.makeText(
+                    context,
+                    "エクスポート先のディレクトリを選択してください",
+                    Toast.LENGTH_SHORT,
+                ).show()
+            },
+        )
+    }
 
     RecordScreenView(
         displayMode = viewModel.displayMode,
         recordList = viewModel.rawRecords.collectAsState(emptyList()).value,
-        recordDateList = viewModel.dateList.collectAsState(emptyList()).value,
+        recordDateList = dateList,
         dailyGoodsSalesSummary = viewModel.dailyGoodsSalesSummary.collectAsState(emptyList()).value,
         snackbarHostState = snackbarHostState,
         onClickBack = onClickBack,
         onSelectDisplayMode = viewModel::updateDisplayMode,
         onClickRecordItem = { onClickRecordItem(it.id) },
-        onClickSummarizedRecordItem = {
-            pendingSaveTargetDate = it.date
-            val documentDirUri =
-                "content://com.android.externalstorage.documents/document/primary:Documents".toUri()
-            fileSavingTargetDirectoryPickerLauncher.launch(documentDirUri)
-        },
+        onClickExportCSV = { showExportTargetDateSelectionDialog = true },
     )
 }
