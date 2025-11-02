@@ -4,21 +4,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -32,63 +23,25 @@ import java.util.Locale
 
 @Composable
 fun RecordScreen(
-    back: () -> Unit,
     viewModel: RecordViewModel,
-    toEdit: (Long) -> Unit,
-    toSummarizeRecord: () -> Unit
+    onClickItem: (Record) -> Unit,
 ) {
     val items = viewModel.items.collectAsState(initial = emptyList())
-    RecordScreen(
+    RecordListContent(
         recordList = items.value,
-        back = back,
-        toEdit = toEdit,
-        toSummarizeRecord = toSummarizeRecord,
+        onClickItem = onClickItem,
     )
-
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun RecordScreen(
-    recordList: List<Record>,
-    back: () -> Unit,
-    toEdit: (Long) -> Unit,
-    toSummarizeRecord: () -> Unit,
-) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.record_manage)) },
-                navigationIcon = {
-                    IconButton(onClick = back) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                actions = {
-                    IconButton(onClick = toSummarizeRecord) {
-                        Icon(Icons.AutoMirrored.Filled.List, contentDescription = "Add")
-                    }
-                }
-            )
-        }
-    ) { paddingValues ->
-        RecordListContent(
-            modifier = Modifier.padding(paddingValues),
-            recordList = recordList,
-            toEdit = toEdit
-        )
-    }
 }
 
 @Composable
 fun RecordListContent(
     modifier: Modifier = Modifier,
     recordList: List<Record>,
-    toEdit: (Long) -> Unit,
+    onClickItem: (Record) -> Unit,
 ) {
-    Column {
+    Column(modifier = modifier) {
         Row(
-            modifier = modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
                 text = stringResource(id = R.string.date_time),
@@ -134,10 +87,7 @@ fun RecordListContent(
                 itemContent = {
                     RecordListItem(
                         record = recordList[it],
-                        onClick = {
-                            toEdit(recordList[it].id)
-                        }
-
+                        onClick = { onClickItem(recordList[it]) },
                     )
                 }
             )
