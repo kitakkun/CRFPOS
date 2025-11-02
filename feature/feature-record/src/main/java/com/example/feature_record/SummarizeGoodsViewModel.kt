@@ -46,8 +46,11 @@ class SummarizeGoodsViewModel @Inject constructor(
                     val quantity = cartItem.quantity
 
                     // 商品ごとの集計を更新
-                    val summary = summaryMap.getOrPut(goods.displayOrder.toLong()) {
-                        GoodsSalesSummary(goodsId = goods.displayOrder.toLong(), goodsName = goods.name)
+                    val summary = summaryMap.getOrPut(goods.id) {
+                        GoodsSalesSummary(
+                            goodsId = goods.id,
+                            goodsName = goods.name
+                        )
                     }
                     summary.totalQuantity += quantity
                 }
