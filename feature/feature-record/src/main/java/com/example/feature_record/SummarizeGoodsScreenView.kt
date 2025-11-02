@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SummarizeGoodsScreen(
+fun SummarizeGoodsScreenView(
     dailyGoodsSalesSummary: List<DailyGoodsSalesSummary>,
 ) {
     Column {

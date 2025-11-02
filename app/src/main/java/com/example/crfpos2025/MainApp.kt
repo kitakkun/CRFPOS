@@ -15,7 +15,7 @@ import com.example.feature_goods.GoodsListViewModel
 import com.example.feature_goods.GoodsScreen
 import com.example.feature_record.EditRecordScreen
 import com.example.feature_record.EditRecordViewModel
-import com.example.feature_record.RecordScreenRoot
+import com.example.feature_record.RecordScreen
 import com.example.feature_sales.SalesScreen
 import com.example.feature_sales.SalesViewModel
 
@@ -63,7 +63,7 @@ fun MainApp() {
         }
 
         composable("/record") {
-            RecordScreenRoot(
+            RecordScreen(
                 viewModel = hiltViewModel(),
                 onClickBack = navController::popBackStack,
                 onClickRecordItem = { navController.navigate("/record/${it}") },

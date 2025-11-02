@@ -19,7 +19,7 @@ import com.example.database.dao.RecordDao
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SummarizeRecordScreen(
+fun SummarizeRecordScreenView(
     recordDateList: List<RecordDao.Summary>,
     onClickItem: (RecordDao.Summary) -> Unit,
 ) {

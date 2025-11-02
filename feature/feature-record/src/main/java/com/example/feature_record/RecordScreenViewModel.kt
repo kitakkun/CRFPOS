@@ -23,7 +23,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
-class RecordScreenRootViewModel @Inject constructor(
+class RecordScreenViewModel @Inject constructor(
     private val repository: RecordRepository,
     private val recordsCSVStringGenerator: RecordsCSVStringGenerator,
 ) : ViewModel() {
